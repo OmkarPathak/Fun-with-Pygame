@@ -173,6 +173,7 @@ def start_game():
         if len(coord_list) > snakeLength:
             del coord_list[0]
 
+        # check if snake touches it's own body
         for current_coord in coord_list[:-1]:
             if current_coord == coord_head:
                 game_over = True
@@ -195,3 +196,4 @@ def start_game():
     quit()
 
 game_startup_screen()
+start_game()
