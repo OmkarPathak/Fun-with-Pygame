@@ -1,3 +1,5 @@
+# Author: OMKAR PATHAK
+
 import pygame, sys
 from pygame.locals import *
 import time
