@@ -47,9 +47,33 @@ def game_startup_screen():
                 if event.key == pygame.K_c:
                     intro = False
 
-        # fill the whole displat with white color
+        # fill the whole display with white color
         DISPLAYSURF.fill(WHITE)
         display_message_on_screen('Welcome to Arbok!!', BLUE, -100)
+        display_message_on_screen('Press C to Play and Q to Quit', BLUE, -70)
+        pygame.display.update()
+
+def pause():
+    pause = True
+    while pause:
+        # get which key is pressed
+        for event in pygame.event.get():
+            # if the X(close button) in the menu pane is pressed
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.KEYDOWN:
+                # if Q is pressed
+                if event.key == pygame.K_q:
+                    pygame.quit()
+                    quit()
+                # if C is pressed
+                if event.key == pygame.K_c:
+                    pause = False
+
+        # fill the whole display with white color
+        DISPLAYSURF.fill(WHITE)
+        display_message_on_screen('Paused', BLUE, -100)
         display_message_on_screen('Press C to Play and Q to Quit', BLUE, -70)
         pygame.display.update()
 
@@ -78,6 +102,12 @@ def snake(coord_list, global_coord_offset):
     # display body
     for coord in coord_list[:-1]:
         pygame.draw.rect(DISPLAYSURF, BLACK, [coord[0], coord[1], global_coord_offset, global_coord_offset])
+
+def score(score):
+    # set the font
+    font = pygame.font.SysFont('freemono', 25)
+    text = font.render('Score: ' + str(score), True, BLACK)
+    DISPLAYSURF.blit(text, [0, 0])
 
 def start_game():
     # required variables
@@ -155,9 +185,12 @@ def start_game():
                     y_coord_offset = global_coord_offset
                     x_coord_offset = 0
                     direction = 'down'
+                # to pause the game
+                elif event.key == pygame.K_p:
+                    pause()
 
             # defining boundaries
-            if abs(x_coord) >= window_width or x_coord <= 0 or abs(y_coord) >= window_height or y_coord <= 0:
+            if abs(x_coord) >= window_width or x_coord < 0 or abs(y_coord) >= window_height or y_coord < 0:
                 game_over = True
 
         # move snake with specified offset
@@ -180,7 +213,9 @@ def start_game():
             if current_coord == coord_head:
                 game_over = True
 
+        # draw the snake and score on screen
         snake(coord_list, global_coord_offset)
+        score(snakeLength - 1)
 
         pygame.display.update()
 
